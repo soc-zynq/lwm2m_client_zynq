@@ -17,3 +17,6 @@ cppcheck.xml
 
 # Ignore clang-format result files
 .clang-format
+.idea/
+cmake-build-debug/
+out/

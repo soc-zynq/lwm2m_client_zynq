@@ -4,23 +4,34 @@ cmake_minimum_required(VERSION 3.10)
 project(lwm2m_client_zynq)
 
 # Set output paths
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/out/bin)
-set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/out/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../out/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../out/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../out/lib)
+
+# Fetch Wakaama
+include(FetchContent)
+FetchContent_Declare(
+    wakaama
+    GIT_REPOSITORY https://github.com/eclipse/wakaama.git
+    GIT_TAG        master # You might want to specify a specific version/tag
+)
+FetchContent_MakeAvailable(wakaama)
 
 # Add include directories
-include_directories(include)
+include_directories(
+    ${CMAKE_SOURCE_DIR}/include
+    ${wakaama_SOURCE_DIR}/core
+    ${wakaama_SOURCE_DIR}/coap
+)
 
 # Add subdirectories
-add_subdirectory(src/app)
-add_subdirectory(src/lib)
-add_subdirectory(src/test)
-add_subdirectory(src/unit_test)
+add_subdirectory(src)
 
 # Enable testing
 enable_testing()
 
 # Set C++ standard
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Add compiler warnings
